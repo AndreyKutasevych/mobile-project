@@ -2,6 +2,7 @@
 *.class
 /build/
 /.gradle/
+/build/
 *.iml
 /local.properties
 /.idea/
