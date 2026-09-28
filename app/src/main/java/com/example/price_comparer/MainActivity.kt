@@ -101,18 +101,23 @@ class MainActivity : AppCompatActivity() {
 
         for (product in products) {
 
-            val markLayout = LinearLayout(this).apply {
+            val productLayout = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
                 setPadding(0, 20, 0, 20)
             }
 
-            val markTitle = TextView(this).apply {
+            val productTitle = TextView(this).apply {
                 text = "${product.id}: ${product.title}"
                 textSize = 20f
             }
 
-            val markDescription = TextView(this).apply {
+            val productDescription = TextView(this).apply {
                 text = product.description
+                textSize = 16f
+            }
+
+            val productPrice = TextView(this).apply {
+                text = product.price.toString()
                 textSize = 16f
             }
 
@@ -140,12 +145,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            markLayout.addView(markTitle)
-            markLayout.addView(markDescription)
-            markLayout.addView(editButton)
-            markLayout.addView(deleteButton)
+            productLayout.addView(productTitle)
+            productLayout.addView(productDescription)
+            productLayout.addView(productPrice)
+            productLayout.addView(editButton)
+            productLayout.addView(deleteButton)
 
-            listLayout.addView(markLayout)
+            listLayout.addView(productLayout)
         }
     }
 }

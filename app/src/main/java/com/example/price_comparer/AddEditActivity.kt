@@ -106,7 +106,7 @@ class AddEditActivity : AppCompatActivity() {
             return
         }
         if (price == null) {
-            price = Random.nextDouble(1.0, 10.0)
+            price = (Random.nextDouble(1.0, 10.0) * 100).toInt() / 100.0
         }
 
         if (editingId == null || editingId == -1L) {
