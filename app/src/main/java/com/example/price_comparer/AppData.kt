@@ -1,4 +1,5 @@
 package com.example.price_comparer
 
-class AppData {
+object AppData {
+    val products = ShoppingList()
 }
