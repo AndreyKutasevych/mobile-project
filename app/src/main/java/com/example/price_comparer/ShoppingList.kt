@@ -1,6 +1,7 @@
 package com.example.price_comparer
 
 import java.util.concurrent.atomic.AtomicLong
+import timber.log.Timber
 
 class ShoppingList{
     private val products = ArrayList<Product>()
@@ -13,6 +14,7 @@ class ShoppingList{
     fun create(product: Product) {
         product.id = lastId.incrementAndGet()
         products.add(product)
+        Timber.i("Created product id=${product.id}, title=${product.title}")
     }
 
     fun update(placemark: Product): Boolean {
@@ -20,6 +22,7 @@ class ShoppingList{
         return if (foundProduct != null) {
             foundProduct.title = placemark.title
             foundProduct.description = placemark.description
+            foundProduct.price = placemark.price
             true
         } else {
             false
