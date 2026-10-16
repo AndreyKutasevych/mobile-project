@@ -9,6 +9,7 @@ class PriceComparerApp : Application() {
         if (Timber.treeCount == 0) {
             Timber.plant(Timber.DebugTree())
         }
+        ThemeSettings.applySaved(this)
         AppData.init(this)
     }
 }
