@@ -3,22 +3,19 @@ package com.example.price_comparer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import timber.log.Timber
 
 class ProductAdapter(
     private var products: List<Product>,
-    private val onEdit: (Product) -> Unit,
-    private val onDelete: (Product) -> Unit
+    private val listener: OnProductListener
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleText: TextView = itemView.findViewById(R.id.titleText)
         val descriptionText: TextView = itemView.findViewById(R.id.descriptionText)
         val priceText: TextView = itemView.findViewById(R.id.priceText)
-        val editButton: Button = itemView.findViewById(R.id.editButton)
-        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -34,8 +31,14 @@ class ProductAdapter(
         holder.descriptionText.text = product.description
         holder.priceText.text = String.format("€%.2f", product.price)
 
-        holder.editButton.setOnClickListener { onEdit(product) }
-        holder.deleteButton.setOnClickListener { onDelete(product) }
+        holder.itemView.setOnClickListener {
+            Timber.d("Item tapped id=${product.id}")
+            listener.onProductClick(product)
+        }
+        holder.itemView.setOnLongClickListener {
+            Timber.d("Item long-pressed id=${product.id}")
+            listener.onProductLongClick(product)
+        }
     }
 
     override fun getItemCount(): Int = products.size
