@@ -1,11 +1,19 @@
 package com.example.price_comparer
 
-import java.util.concurrent.atomic.AtomicLong
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicLong
 
-class ShoppingList{
+class ShoppingList(private val store: ProductXmlStore? = null) {
     private val products = ArrayList<Product>()
     private val lastId = AtomicLong(0L)
+
+    init {
+        store?.let {
+            val loaded = it.load()
+            products.addAll(loaded)
+            lastId.set(loaded.maxOfOrNull { p -> p.id } ?: 0L)
+        }
+    }
 
     fun findAll(): List<Product> {
         return products
@@ -15,6 +23,7 @@ class ShoppingList{
         product.id = lastId.incrementAndGet()
         products.add(product)
         Timber.i("Created product id=${product.id}, title=${product.title}")
+        save()
     }
 
     fun update(placemark: Product): Boolean {
@@ -23,23 +32,33 @@ class ShoppingList{
             foundProduct.title = placemark.title
             foundProduct.description = placemark.description
             foundProduct.price = placemark.price
+            Timber.i("Updated product id=${placemark.id}")
+            save()
             true
         } else {
+            Timber.w("Update failed: id=${placemark.id} not found")
             false
         }
     }
 
     fun delete(id: Long): Boolean {
-        val foundPlacemark = findOne(id)
-        return if (foundPlacemark != null) {
-            products.remove(foundPlacemark)
+        val foundProduct = findOne(id)
+        return if (foundProduct != null) {
+            products.remove(foundProduct)
+            Timber.i("Deleted product id=$id")
+            save()
             true
         } else {
+            Timber.w("Delete failed: id=$id not found")
             false
         }
     }
 
     fun findOne(id: Long): Product? {
         return products.find { p -> p.id == id }
+    }
+
+    private fun save() {
+        store?.save(products)
     }
 }
