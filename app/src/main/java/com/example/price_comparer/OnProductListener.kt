@@ -1,4 +1,6 @@
 package com.example.price_comparer
 
-class OnProductListener {
+interface OnProductListener {
+    fun onProductClick(product: Product)
+    fun onProductLongClick(product: Product): Boolean
 }
